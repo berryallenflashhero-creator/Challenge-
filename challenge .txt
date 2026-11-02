@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>من بهتر و قوی‌تر 💪</title>
+<style>
+  * { box-sizing: border-box; font-family: Tahoma, sans-serif; -webkit-tap-highlight-color: transparent; }
+  
+  body {
+    margin: 0; min-height: 100vh;
+    background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #FFE4B5 100%);
+    display: flex; justify-content: center; padding: 12px;
+    overflow-x: hidden;
+  }
+  
+  .app { width: 100%; max-width: 500px; }
+  
+  /* هدر */
+  .header {
+    text-align: center; padding: 12px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 16px; margin-bottom: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .header h1 {
+    margin: 0; font-size: 20px; color: #2d3436;
+    background: linear-gradient(90deg, #e84393, #6c5ce7);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .sub { font-size: 12px; color: #636e72; margin-top: 4px; }
+  
+  /* آمار بالای صفحه */
+  .stats {
+    display: flex; gap: 8px; margin-bottom: 12px;
+  }
+  .stat-box {
+    flex: 1; background: rgba(255,255,255,0.85);
+    border-radius: 12px; padding: 8px; text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .stat-box .num { font-size: 18px; font-weight: bold; color: #6c5ce7; }
+  .stat-box .label { font-size: 10px; color: #636e72; margin-top: 2px; }
+  .stat-box.streak .num { color: #e17055; }
+  .stat-box.passed .num { color: #00b894; }
+  
+  /* صحنه جاده */
+  .scene {
+    position: relative; height: 260px;
+    background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    margin-bottom: 12px;
+  }
+  
+  /* ابرها */
+  .cloud {
+    position: absolute; font-size: 28px; opacity: 0.9;
+    animation: floatCloud 20s linear infinite;
+  }
+  .cloud.c1 { top: 15px; left: -50px; animation-duration: 25s; }
+  .cloud.c2 { top: 45px; left: -50px; animation-duration: 35s; animation-delay: -10s; font-size: 22px; }
+  .cloud.c3 { top: 8px; left: -50px; animation-duration: 40s; animation-delay: -20s; font-size: 18px; }
+  @keyframes floatCloud {
+    from { transform: translateX(0); }
+    to { transform: translateX(600px); }
+  }
+  
+  /* خورشید */
+  .sun {
+    position: absolute; top: 12px; right: 15px;
+    font-size: 32px;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  /* جاده */
+  .road {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 90px;
+    background: linear-gradient(180deg, #7f8c8d 0%, #5d6d7e 100%);
+    border-top: 3px dashed #fff;
+  }
+  .road::before {
+    content: '';
+    position: absolute; top: 42px; left: 0; right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, #f1c40f 0, #f1c40f 20px, transparent 20px, transparent 40px);
+    animation: roadMove 1s linear infinite;
+  }
+  @keyframes roadMove {
+    from { background-position: 0 0; }
+    to { background-position: -40px 0; }
+  }
+  
+  /* شخصیت‌ها */
+  .character {
+    position: absolute; bottom: 55px;
+    font-size: 36px; transition: left 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+  .character.me { left: 20px; animation: walkBounce 0.8s ease-in-out infinite; }
+  .character.farahnaz {
+    right: 20px; font-size: 34px;
+    animation: farahnazPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes walkBounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  @keyframes farahnazPulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  
+  /* اسم فرحناز */
+  .farahnaz-label {
+    position: absolute; bottom: 100px; right: 10px;
+    font-size: 11px; background: rgba(232,67,147,0.9);
+    color: white; padding: 2px 8px; border-radius: 8px;
+    font-weight: bold;
+  }
+  
+  /* نوار پیشرفت بالای صحنه */
+  .progress-info {
+    position: absolute; top: 8px; left: 8px;
+    background: rgba(0,0,0,0.6); color: white;
+    padding: 4px 10px; border-radius: 12px; font-size: 11px;
+  }
+  
+  /* دکمه اصلی */
+  .main-btn {
+    width: 100%; padding: 16px; border: none;
+    border-radius: 16px; font-size: 16px; font-weight: bold;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.2s; margin-bottom: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .main-btn.active {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    color: white;
+  }
+  .main-btn.active:active { transform: scale(0.97); }
+  .main-btn.done {
+    background: #dfe6e9; color: #636e72;
+    cursor: not-allowed;
+  }
+  
+  /* پیام */
+  .message {
+    padding: 14px; border-radius: 14px;
+    text-align: center; font-size: 14px;
+    margin-bottom: 10px; min-height: 20px;
+    font-weight: bold; line-height: 1.6;
+    animation: popIn 0.4s ease;
+  }
+  .message.good {
+    background: linear-gradient(135deg, #55efc4, #00b894);
+    color: #004d40;
+  }
+  .message.bad {
+    background: linear-gradient(135deg, #ff7675, #d63031);
+    color: white;
+  }
+  .message.win {
+    background: linear-gradient(135deg, #fdcb6e, #f39c12);
+    color: #5c3d00;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  
+  /* نوار پیشرفت پایین */
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.85);
+    border-radius: 12px; padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .progress-bar-track {
+    height: 14px; background: #dfe6e9;
+    border-radius: 10px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #6c5ce7, #e84393);
+    border-radius: 10px; transition: width 1s ease;
+  }
+  .progress-text {
+    text-align: center; font-size: 12px;
+    color: #2d3436; margin-top: 6px;
+  }
+  
+  /* دکمه ریست */
+  .reset-btn {
+    width: 100%; padding: 10px; margin-top: 10px;
+    background: rgba(255,255,255,0.6); color: #636e72;
+    border: none; border-radius: 10px; font-size: 12px;
+    cursor: pointer; font-family: inherit;
+  }
+  
+  /* انیمیشن ذرات هنگام موفقیت */
+  .particle {
+    position: absolute; font-size: 20px;
+    pointer-events: none; z-index: 100;
+    animation: explode 1s ease-out forwards;
+  }
+  @keyframes explode {
+    0% { transform: translate(0,0) scale(0); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; }
+  }
+  
+  /* قفل */
+  .lock-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4); border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: white; text-align: center;
+    padding: 20px; font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <h1>💪 من بهتر و قوی‌تر</h1>
+    <div class="sub">۳۰ قدم تا رسیدن به فرحناز 💖</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="num" id="stepsNum">۰</div>
+      <div class="label">قدم به جلو</div>
+    </div>
+    <div class="stat-box streak">
+      <div class="num" id="streakNum">۰</div>
+      <div class="label">🔥 استریک</div>
+    </div>
+    <div class="stat-box passed">
+      <div class="num" id="totalNum">۰</div>
+      <div class="label">✅ روز موفق</div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="sun">☀️</div>
+    <div class="cloud c1">☁️</div>
+    <div class="cloud c2">☁️</div>
+    <div class="cloud c3">☁️</div>
+    
+    <div class="progress-info" id="progressInfo">قدم ۰ از ۳۰</div>
+    
+    <div class="farahnaz-label">فرحناز 💖</div>
+    <div class="character farahnaz" id="farahnaz">👩</div>
+    <div class="character me" id="me">🚶</div>
+    
+    <div class="road"></div>
+    
+    <div id="lockOverlay" class="lock-overlay" style="display:none;"></div>
+  </div>
+
+  <div id="messageBox" class="message good">
+    امروز رو شروع کن! یه قدم به فرحناز نزدیک‌تر شو 💪
+  </div>
+
+  <button class="main-btn active" id="mainBtn" onclick="doStep()">
+    ✅ امروز انجام دادم
+  </button>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">۰٪</div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">🔄 شروع دوباره (پاک کردن همه)</button>
+
+</div>
+
+<script>
+const TOTAL_STEPS = 30;
+const STORAGE_KEY = 'challenge_farahnaz_v1';
+
+// بارگذاری داده
+let data = loadData();
+
+function loadData() {
+  try {
+    const d = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (d && typeof d.steps === 'number') return d;
+  } catch(e) {}
+  return {
+    steps: 0,
+    streak: 0,
+    total: 0,
+    lastDate: null,
+    lastMessage: null,
+    lastMessageType: 'good'
+  };
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// گرفتن تاریخ امروز به صورت رشته
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+// محاسبه تفاوت روزها
+function daysBetween(dateStr1, dateStr2) {
+  if (!dateStr1 || !dateStr2) return 0;
+  const d1 = new Date(dateStr1 + 'T00:00:00');
+  const d2 = new Date(dateStr2 + 'T00:00:00');
+  return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+
+// چک کردن اینکه چند روز گذشته و اگه لازم بود عقب ببر
+function checkPenalty() {
+  if (!data.lastDate) return; // اولین بار
+  
+  const today = todayStr();
+  const daysPassed = daysBetween(data.lastDate, today);
+  
+  if (daysPassed > 1) {
+    // کاربر یه روز یا بیشتر انجام نداده → تنبیه
+    const missedDays = daysPassed - 1; // تعداد روزهایی که انجام نداده
+    const penalty = Math.min(missedDays, data.steps); // بیشتر از پیشرفت فعلی عقب نره
+    
+    if (penalty > 0) {
+      data.steps = Math.max(0, data.steps - penalty);
+      data.streak = 0;
+      data.lastMessage = `⚠️ ${missedDays} روز انجام ندادی! ${penalty} قدم عقب رفتی. امروز جبران کن! 💪`;
+      data.lastMessageType = 'bad';
+      saveData();
+    }
+  }
+}
+
+// ثبت قدم
+function doStep() {
+  const today = todayStr();
+  
+  // اگه امروز قبلاً زده
+  if (data.lastDate === today) {
+    return;
+  }
+  
+  // چک تنبیه قبل از ثبت
+  checkPenalty();
+  
+  // بررسی برد
+  if (data.steps >= TOTAL_STEPS) {
+    showMessage('🏆 تو رسیدی به فرحناز! فتح شد!', 'win');
+    return;
+  }
+  
+  // ثبت قدم جدید
+  data.steps++;
+  data.total++;
+  
+  // استریک
+  if (data.lastDate) {
+    const daysPassed = daysBetween(data.lastDate, today);
+    if (daysPassed === 1) {
+      data.streak++;
+    } else {
+      data.streak = 1;
+    }
+  } else {
+    data.streak = 1;
+  }
+  
+  data.lastDate = today;
+  
+  // پیام
+  if (data.steps >= TOTAL_STEPS) {
+    data.lastMessage = '🎉🎊 رسیدی به فرحناز! ۳۰ قدم کامل شد! تو یه قهرمانی! 🏆';
+    data.lastMessageType = 'win';
+  } else {
+    const progress = Math.round((data.steps / TOTAL_STEPS) * 100);
+    data.lastMessage = `آفرین! یه قدم به فرحناز نزدیک‌تر شدی 💖 (${progress}٪)`;
+    data.lastMessageType = 'good';
+  }
+  
+  saveData();
+  render();
+  playSound(true);
+  celebrate();
+}
+
+// انیمیشن جشن
+function celebrate() {
+  const scene = document.querySelector('.scene');
+  const emojis = ['🎉', '💖', '✨', '🌟', '💪', '🔥'];
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      p.style.left = '30%';
+      p.style.top = '50%';
+      p.style.setProperty('--tx', (Math.random() - 0.5) * 300 + 'px');
+      p.style.setProperty('--ty', (Math.random() - 0.5) * 300 + 'px');
+      scene.appendChild(p);
+      setTimeout(() => p.remove(), 1000);
+    }, i * 40);
+  }
+}
+
+// صدا
+function playSound(good) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    if (good) {
+      o.frequency.setValueAtTime(660, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(990, ctx.currentTime + 0.15);
+    } else {
+      o.frequency.setValueAtTime(300, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2);
+    }
+    g.gain.setValueAtTime(0.08, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+    o.start(); o.stop(ctx.currentTime + 0.25);
+  } catch(e) {}
+}
+
+// نمایش پیام
+function showMessage(text, type) {
+  const box = document.getElementById('messageBox');
+  box.textContent = text;
+  box.className = 'message ' + type;
+}
+
+// ریست
+function resetAll() {
+  if (!confirm('همه چیز پاک بشه و از اول شروع کنی؟')) return;
+  data = {
+    steps: 0, streak: 0, total: 0,
+    lastDate: null, lastMessage: null, lastMessageType: 'good'
+  };
+  saveData();
+  render();
+}
+
+// رندر
+function render() {
+  // عددها
+  const toFa = (n) => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+  
+  document.getElementById('stepsNum').textContent = toFa(data.steps);
+  document.getElementById('streakNum').textContent = toFa(data.streak);
+  document.getElementById('totalNum').textContent = toFa(data.total);
+  
+  // پیشرفت
+  const percent = Math.round((data.steps / TOTAL_STEPS) * 100);
+  document.getElementById('progressFill').style.width = percent + '%';
+  document.getElementById('progressText').textContent = toFa(percent) + '٪ (' + toFa(data.steps) + ' از ' + toFa(TOTAL_STEPS) + ')';
+  document.getElementById('progressInfo').textContent = 'قدم ' + toFa(data.steps) + ' از ' + toFa(TOTAL_STEPS);
+  
+  // موقعیت شخصیت
+  const sceneWidth = document.querySelector('.scene').offsetWidth || 400;
+  const startX = 20;
+  const endX = sceneWidth - 100;
+  const range = endX - startX;
+  const mePos = startX + (data.steps / TOTAL_STEPS) * range;
+  document.getElementById('me').style.left = mePos + 'px';
+  
+  // تغییر شکل شخصیت بر اساس پیشرفت
+  const me = document.getElementById('me');
+  if (data.steps === 0) me.textContent = '🚶';
+  else if (data.steps < 10) me.textContent = '🚶';
+  else if (data.steps < 20) me.textContent = '🏃';
+  else if (data.steps < 30) me.textContent = '💪';
+  else me.textContent = '🎉';
+  
+  // پیام
+  const today = todayStr();
+  const isTodayDone = data.lastDate === today;
+  
+  if (data.lastMessage) {
+    showMessage(data.lastMessage, data.lastMessageType);
+  } else {
+    showMessage('امروز رو شروع کن! یه قدم به فرحناز نزدیک‌تر شو 💪', 'good');
+  }
+  
+  // دکمه
+  const btn = document.getElementById('mainBtn');
+  const lockOverlay = document.getElementById('lockOverlay');
+  
+  if (data.steps >= TOTAL_STEPS) {
+    btn.textContent = '🏆 رسیدی به فرحناز!';
+    btn.className = 'main-btn done';
+    btn.disabled = true;
+    lockOverlay.style.display = 'none';
+  } else if (isTodayDone) {
+    btn.textContent = '✅ امروز انجام دادی! فردا برگرد';
+    btn.className = 'main-btn done';
+    btn.disabled = true;
+    lockOverlay.style.display = 'none';
+  } else {
+    btn.textContent = '✅ امروز انجام دادم (+۱ قدم)';
+    btn.className = 'main-btn active';
+    btn.disabled = false;
+    lockOverlay.style.display = 'none';
+  }
+}
+
+// شروع: چک تنبیه موقع باز کردن
+checkPenalty();
+render();
+
+// اگه تنبیه شد، پیام رو نشون بده
+if (data.lastMessageType === 'bad' && data.lastMessage) {
+  setTimeout(() => {
+    playSound(false);
+  }, 300);
+}
+
+// ریسایز
+window.addEventListener('resize', render);
+</script>
+</body>
+</html>
